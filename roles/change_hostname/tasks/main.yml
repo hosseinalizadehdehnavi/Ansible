@@ -1,0 +1,8 @@
+---
+- name: Change Hostname
+  become: yes
+  hostname:
+    name: "ansible-{{ groups['vm_test'].index(inventory_hostname) }}"
+  tags: [hostname]
+...
+

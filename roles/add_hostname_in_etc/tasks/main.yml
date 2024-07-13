@@ -1,0 +1,16 @@
+---
+- name: Add IP in File
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    line: "#Ansible Hosts: "
+
+- name: Add IP in File
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{ item }}"
+  loop: "{{ groups['all'] }}"
+
+...
+

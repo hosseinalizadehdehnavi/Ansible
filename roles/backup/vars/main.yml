@@ -1,0 +1,10 @@
+---
+# Convert the file to compressed
+path_compress: /home/hossein/Desktop/provision/project.yml
+dest_compress: /home/hossein/Desktop/provision/project.yml.tar.gz
+
+# Copy File to Host
+source_copy: /home/hossein/Desktop/provision/project.yml.tar.gz
+destination_copy: ./
+
+...

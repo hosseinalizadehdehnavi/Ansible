@@ -1,0 +1,57 @@
+---
+- name: Download Exporter
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-amd64.tar.gz
+    dest: ./roles/install_node_exporter/templates/
+    mode: 0747
+  delegate_to: localhost
+
+- name: Copy node_exporter.gz file to Host
+  copy:
+    src: ./roles/install_node_exporter/templates/node_exporter-1.1.2.linux-amd64.tar.gz
+    dest: ./
+
+- name: Extract Tar Gz File
+  unarchive:
+    src: ./node_exporter-1.1.2.linux-amd64.tar.gz
+    dest: ./
+    remote_src: yes
+
+- name: Copy node_exporter(Binary) file
+  become: yes
+  copy:
+    src: ./node_exporter-1.1.2.linux-amd64/node_exporter
+    dest: /usr/local/bin/
+    remote_src: yes
+
+- name: Change Premission Binary
+  become: yes
+  file:
+    path: /usr/local/bin/node_exporter
+    mode: 0747
+
+- name: Create User
+  become: yes
+  user:
+    name: node_exporter
+    system: yes
+    shell: /bin/false
+
+- name: Copy node_exporter.service from Node Control to Host
+  become: yes
+  copy:
+    src: ./roles/install_node_exporter/files/node_exporter.service
+    dest: /etc/systemd/system/
+
+- name: Reload systemd daemon
+  become: yes
+  command: systemctl daemon-reload
+
+- name: enable node_exporter
+  become: yes
+  systemd:
+    name: node_exporter
+    state: started
+    enabled: yes
+
+...

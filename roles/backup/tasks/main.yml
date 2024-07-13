@@ -1,0 +1,16 @@
+
+---
+- name: Convert the File to Compressed
+  archive:
+    path: "{{ path_compress }}"
+    dest: "{{ dest_compress }}"
+    format: gz
+  delegate_to: localhost
+
+- name: Copy File to Host
+  copy:
+    src: "{{ source_copy }}"
+    dest: "{{ destination_copy }}"
+
+...
+

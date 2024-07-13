@@ -1,0 +1,16 @@
+---
+- name: Apt Update
+  become: yes
+  apt:
+    update-cache: yes
+  tags: [update]
+
+- name: Install Package
+  become: yes
+  apt:
+    name: "{{ package_name }}"
+    state: present
+  tags: [install]
+
+...
+
