@@ -1,0 +1,46 @@
+---
+##......................Delete..............................
+
+- name: Remove content between #Ansible Hosts: and #End of Ansible Hosts
+  become: yes
+  replace:
+    path: /etc/hosts
+    regexp: '(?s)#Ansible Hosts:(.*)#End of Ansible Hosts|^#Ansible Hosts:|^#End of Ansible Hosts'
+    replace: ''
+  tags: delete
+
+- name: Remove blank lines from /etc/hosts
+  become: yes
+  replace:
+    path: /etc/hosts
+    regexp: '^\s*$'
+    replace: ''
+  tags: delete
+
+##......................Hosts..............................
+
+- name: Add Header to /etc/hosts
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    line: "#Ansible Hosts: "
+  tags: hosts
+
+- name: Add Hosts to /etc/hosts
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars[item]['ip'] }} {{ item }}"
+  when: hostvars[item]['ip'] is defined and hostvars[item]['ip'] != 'unknown_ip'
+  loop: "{{ groups['all'] }}"
+  tags: hosts
+
+- name: Add Footer to /etc/hosts
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    line: "#End of Ansible Hosts"
+  tags: hosts
+
+##....................................................
+
