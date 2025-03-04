@@ -5,7 +5,6 @@
     path: /etc/resolv.conf
     line: "{{ item }}"
   loop:
-    - nameserver 178.22.122.100
-    - nameserver 185.51.200.2
+    - nameserver <NS1>
+    - nameserver <NS2>
 ...
-
