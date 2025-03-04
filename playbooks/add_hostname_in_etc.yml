@@ -1,0 +1,6 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+  roles:
+    - add_hostname_in_etc
