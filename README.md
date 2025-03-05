@@ -14,6 +14,8 @@ This project includes various **Roles** for essential system configurations:
 6. **`disable_swap`** – Disables and removes swap space.  
 7. **`install_node_exporter`** – Installs **Node Exporter** for system monitoring.  
 8. **`set_dns`** – Configures the system’s DNS server.  
+9. **`docker`** – Installs the latest **Docker** package using the official Docker repository.  
+10. **`docker_compose`** – Installs **Docker Compose V1** (`docker-compose` command) using the unofficial GitHub releases.
 
 ## **Prerequisites**  
 Before using this project, ensure you have:  

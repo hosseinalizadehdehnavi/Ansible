@@ -1,0 +1,40 @@
+---
+    - name: Ensure curl is installed
+      apt:
+        name: curl
+        state: present
+        update_cache: yes
+
+    - name: Ensure jq is installed (for parsing JSON)
+      apt:
+        name: jq
+        state: present
+        update_cache: yes
+
+    - name: Fetch the latest Docker Compose release version
+      shell: |
+        curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name
+      register: compose_version
+      changed_when: false
+      failed_when: compose_version.rc != 0
+
+    - name: Download the latest Docker Compose binary
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/{{ compose_version.stdout }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x'
+
+    - name: Ensure Docker Compose is executable
+      file:
+        path: /usr/local/bin/docker-compose
+        mode: 'u+x'
+
+    - name: Verify Docker Compose installation
+      command: docker-compose --version
+      register: result
+      changed_when: false
+
+    - name: Show Docker Compose version
+      debug:
+        msg: "Docker Compose version: {{ result.stdout }}"
+
